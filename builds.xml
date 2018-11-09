@@ -1,0 +1,51 @@
+<project default="build">
+	<property name="target.dir" value="target" />
+	<property name="src.main.dir" value="src/main/java" />
+	<property name="src.test.dir" value="src/test/java" />
+	<property name="build.classes.dir" value="${target.dir}/classes" />
+	<property name="test.classes.dir" value="${target.dir}/test-classes" />
+	<property name="test.report.dir" location="${target.dir}/test-report" />
+	<property name="jar.name" value="devopspractitionerproject-numbers.jar" />
+
+	<path id="classpath.test.resources">
+		<pathelement location="src/test/resources/lib/junit-4.12.jar" />
+		<pathelement location="src/test/resources/lib/hamcrest-core-1.3.jar" />
+	</path>
+
+	<target name="build">
+		<delete dir="build" />
+		<mkdir dir="${build.classes.dir}" />
+		<javac srcdir="${src.main.dir}" destdir="${build.classes.dir}" includeantruntime="false">
+		</javac>
+		<javac srcdir="${src.test.dir}" destdir="${build.classes.dir}" includeantruntime="false">
+			<classpath refid="classpath.test.resources" />
+		</javac>
+		<mkdir dir="${test.report.dir}" />
+		<junit printsummary="yes" haltonfailure="yes">
+			<classpath>
+				<path refid="classpath.test.resources" />
+				<pathelement path="${build.classes.dir}" />
+			</classpath>
+			<formatter type="plain" />
+			<formatter type="xml" />
+			<batchtest fork="yes" todir="${test.report.dir}">
+				<fileset dir="${build.classes.dir}">
+					<include name="**/*Test.class" />
+				</fileset>
+			</batchtest>
+		</junit>
+		<junitreport todir="${test.report.dir}">
+			<fileset dir="${test.report.dir}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report todir="${test.report.dir}" format="frames" />
+		</junitreport>
+		<record name="${test.report.dir}/test-output.txt" action="start" />
+		<jar destfile="${target.dir}/${jar.name}" basedir="${build.classes.dir}" excludes="**/*Test.class">
+			<manifest>
+				<attribute name="Main-Class" value="com.mindtree.devopspractitionerproject.numbers.NumbersToWordsApp" />
+			</manifest>
+		</jar>
+	</target>
+
+</project>

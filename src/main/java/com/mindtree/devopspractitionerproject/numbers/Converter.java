@@ -41,7 +41,7 @@ public class Converter {
 
 	public String convertToWords(int number) {
 		if (number < 0 || number > 999) {
-			return "Invalid Number";
+			return "Invalid number";
 		}
 
 		String word = "";
@@ -76,6 +76,6 @@ public class Converter {
 			}
 			highestIndex--;
 		}
-		return word;
+		return word.trim();
 	}
 }
